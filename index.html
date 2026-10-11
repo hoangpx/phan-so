@@ -23,17 +23,22 @@
   --ok-bg: #e5f4ea;
   --bad: #c2412d;
   --bad-bg: #fbe8e4;
+  --plate: #f1efe8;
+  --tray: #f4ead8;
+  --crust: #d79a4e;
+  --cheese: #f7d46a;
+  --pep: #c4462f;
   --display: "Lexend", "Segoe UI", system-ui, sans-serif;
   --body: "Nunito", "Segoe UI", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #161b1f; --paper: #1e2429; --ink: #e8ecef; --muted: #9aa6af; --line: #344048;
   --accent: #6cc4b0; --accent-ink: #10201b; --box: #6f7f8a; --chip: #23362f;
-  --ok: #6fd08f; --ok-bg: #1d3526; --bad: #f08a76; --bad-bg: #3b221d; color-scheme: dark } }
+  --ok: #6fd08f; --ok-bg: #1d3526; --bad: #f08a76; --bad-bg: #3b221d; --plate: #2a3238; --tray: #2c2721; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #161b1f; --paper: #1e2429; --ink: #e8ecef; --muted: #9aa6af; --line: #344048;
   --accent: #6cc4b0; --accent-ink: #10201b; --box: #6f7f8a; --chip: #23362f;
-  --ok: #6fd08f; --ok-bg: #1d3526; --bad: #f08a76; --bad-bg: #3b221d; color-scheme: dark }
+  --ok: #6fd08f; --ok-bg: #1d3526; --bad: #f08a76; --bad-bg: #3b221d; --plate: #2a3238; --tray: #2c2721; color-scheme: dark }
 
 body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; padding: 24px 16px 110px; }
 .sheet { max-width: 860px; margin: 0 auto; background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 32px clamp(16px, 4vw, 44px); }
@@ -83,6 +88,102 @@ button.primary { background: var(--accent); color: var(--accent-ink); }
 button.ghost { background: transparent; color: var(--accent); }
 button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
+/* ---- tabs ---- */
+.tabs { max-width: 860px; margin: 0 auto 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+.tabs button { background: var(--paper); color: var(--ink); border: 2px solid var(--line); }
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+.math { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 500; font-size: 22px; vertical-align: middle; font-variant-numeric: tabular-nums; }
+.back { color: var(--accent); font-weight: 700; }
+
+/* ---- bài học tương tác ---- */
+.lhead { gap: 8px; }
+.lnav { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; }
+.lstep { font-weight: 800; color: var(--accent); margin-right: auto; }
+button.link { background: none; border: 0; padding: 4px 0; color: var(--muted); font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+button.link:hover { color: var(--accent); }
+
+.tutor { display: flex; gap: 14px; align-items: flex-start; margin: 16px 0 12px; }
+.avatar { width: 64px; height: 64px; flex: none; }
+.av-crust { fill: var(--crust); } .av-cheese { fill: var(--cheese); } .av-eye { fill: #2b2118; }
+.avatar path, .avatar ellipse { fill: none; stroke: #2b2118; stroke-width: 3.2; stroke-linecap: round; }
+.avatar ellipse { fill: #2b2118; stroke: none; }
+.avatar .m-oops, .avatar .m-wow { display: none; }
+.avatar.oops .m-happy, .avatar.wow .m-happy { display: none; }
+.avatar.oops .m-oops, .avatar.wow .m-wow { display: inline; }
+.say-box { position: relative; margin: 0; flex: 1; min-width: 0; background: var(--chip); border-radius: 12px; padding: 12px 16px; font-size: 17px; line-height: 1.55; min-height: 3.2em; }
+.say-box::before { content: ""; position: absolute; left: -8px; top: 22px; border: 8px solid transparent; border-left: 0; border-right-color: var(--chip); }
+.say-box b { color: var(--accent); }
+.say-box.in { animation: sayin .35s ease-out; }
+@keyframes sayin { from { opacity: .2; transform: translateY(4px); } }
+.avatar.wow { animation: hop .5s ease-out; }
+.avatar.oops { animation: shake .4s ease-out; }
+@keyframes hop { 40% { transform: translateY(-10px); } }
+@keyframes shake { 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+
+.stagewrap { border-radius: 16px; }
+#stage { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
+#stage.cutting { cursor: crosshair; }
+.crust { fill: var(--crust); stroke: var(--paper); stroke-width: 2.5; stroke-linejoin: round; }
+.cheese { fill: var(--cheese); stroke: none; }
+.pep { fill: var(--pep); stroke: none; }
+.empty { fill: none; stroke: var(--box); stroke-width: 1.5; stroke-dasharray: 4 4; }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } }
+.zone-tray { fill: var(--tray); }
+.zone-plate { fill: var(--plate); stroke: var(--line); stroke-width: 2; stroke-dasharray: 8 6; transition: fill .15s; }
+.zone-plate.hot { fill: var(--chip); stroke: var(--accent); }
+.zone { fill: var(--muted); font: 800 17px var(--body); }
+.board-plate { fill: var(--paper); stroke: var(--line); stroke-width: 1.5; }
+.slot { fill: var(--paper); stroke: var(--line); stroke-width: 1.5; transition: stroke .3s; }
+.slot.whole { stroke: var(--ok); stroke-width: 4; }
+.empty.faint { stroke-opacity: .55; }
+.slice.grab { cursor: grab; }
+.slice.grab:hover > * { filter: brightness(1.06); }
+.slice .sep { animation: sep .5s ease-out both; }
+@keyframes sep { from { transform: translate(0, 0); } }
+.fly { transition: transform .9s cubic-bezier(.3,.7,.3,1); }
+@media (prefers-reduced-motion: reduce) { .fly { transition: none; } }
+.slice .pop { animation: pop .35s ease-out; transform-box: fill-box; transform-origin: center; }
+.lift { filter: drop-shadow(0 6px 6px rgba(0,0,0,.25)); cursor: grabbing; }
+.badge circle { fill: var(--ok); } .badge text { fill: #fff; font: 800 18px var(--display); text-anchor: middle; }
+.whole-b { animation: pop .4s ease-out; transform-box: fill-box; transform-origin: center; }
+.sfrac, .badge, .guide, .stroke, .cutfx { pointer-events: none; }
+.sfrac circle { fill: var(--paper); stroke: var(--line); }
+.sfrac text { fill: var(--ink); font-family: var(--display); font-weight: 700; text-anchor: middle; }
+.sfrac line { stroke: var(--ink); stroke-width: 1.6; }
+.guide { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 10 8; animation: march 1s linear infinite; }
+@keyframes march { to { stroke-dashoffset: -18; } }
+.stroke { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 2 6; }
+.cutfx { stroke: var(--paper); stroke-width: 5; stroke-linecap: round; animation: cutfx .6s ease-out forwards; }
+@keyframes cutfx { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .slice .sep, .guide, .avatar.wow, .avatar.oops, .say-box.in, .grp { animation: none !important; } }
+
+.board { min-height: 86px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 24px; padding: 14px 8px 6px; font-family: var(--display); }
+.board .live { font-size: 20px; color: var(--muted); font-weight: 500; }
+.board .live b { color: var(--ink); font-size: 26px; }
+.board .target { font-size: 20px; display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.board .target .math { font-size: 30px; }
+.board .target .frac .num, .board .target .frac .den { font-size: 26px; }
+.annot { display: flex; align-items: center; gap: 14px; }
+.bigf .frac .num, .bigf .frac .den { font-size: 40px; }
+.bigf .frac .bar-line { height: 3px; min-width: 1.4em; }
+.notes { display: grid; gap: 22px; font-family: var(--body); font-weight: 700; color: var(--muted); font-size: 16px; }
+.chain { display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 10px; font-size: 28px; font-weight: 500; }
+.chain .frac .num, .chain .frac .den { font-size: 24px; }
+.chain .grp { display: inline-flex; align-items: center; gap: 8px; animation: rise .5s ease-out both; animation-delay: calc(var(--i) * .9s); }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+.chain input.box { font-size: 22px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 10px 0 4px; min-height: 48px; }
+.note { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 12px; color: var(--muted); font-size: 15px; }
+.note summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+.note p { max-width: 65ch; line-height: 1.6; }
+@media (max-width: 480px) {
+  .avatar { width: 48px; height: 48px; }
+  .say-box { font-size: 16px; padding: 10px 12px; }
+  .chain { font-size: 22px; }
+  .chain .frac .num, .chain .frac .den { font-size: 20px; }
+}
+
 @media (max-width: 480px) {
   h1 { font-size: 24px; }
   .eq { font-size: 19px; }
@@ -95,10 +196,48 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 </head>
 <body>
 
-<main class="sheet">
+<nav class="tabs" role="tablist">
+  <button type="button" role="tab" id="tab-pizza" data-tab="pizza">Học với bánh pizza</button>
+  <button type="button" role="tab" id="tab-baitap" data-tab="baitap">Làm bài</button>
+</nav>
+
+<main class="sheet" id="pane-pizza" role="tabpanel" aria-labelledby="tab-pizza">
+  <header class="lhead">
+    <h1>Phân số với bánh pizza</h1>
+    <div class="lnav">
+      <span class="lstep" id="lstep"></span>
+      <button type="button" class="link" id="lrestart">Học lại từ đầu</button>
+      <button type="button" class="link" id="lskip">Chơi đố luôn</button>
+    </div>
+  </header>
+
+  <div class="tutor">
+    <svg class="avatar" id="avatar" viewBox="-40 -40 80 80" aria-hidden="true">
+      <circle r="36" class="av-crust"/><circle r="29" class="av-cheese"/>
+      <circle cx="-17" cy="15" r="5" class="pep"/><circle cx="19" cy="-19" r="4" class="pep"/><circle cx="-20" cy="-14" r="3.5" class="pep"/>
+      <circle cx="-10" cy="-4" r="4.5" class="av-eye"/><circle cx="10" cy="-4" r="4.5" class="av-eye"/>
+      <path class="m-happy" d="M-11 8 Q0 19 11 8"/>
+      <path class="m-oops" d="M-9 14 Q0 8 9 14"/>
+      <ellipse class="m-wow" cx="0" cy="12" rx="5" ry="6.5"/>
+    </svg>
+    <p class="say-box" id="tsay" aria-live="polite"></p>
+  </div>
+
+  <div class="stagewrap"><svg id="stage" role="img" aria-label="Bánh trên bàn và đĩa của con"></svg></div>
+
+  <div class="board" id="board" aria-live="polite"></div>
+  <div class="actions" id="actions"></div>
+
+  <details class="note">
+    <summary>Cho bố mẹ: sao lại có hai cách viết 3/2 và 1 1/2?</summary>
+    <p>Cả hai đều đúng và là cùng một lượng. 3/2 là đếm theo miếng, 1 1/2 là đếm theo cái bánh nguyên (giống 90 phút và 1 giờ 30 phút). Nói chuyện hằng ngày thì dùng hỗn số vì dễ hình dung. Khi nhân, chia phân số thì dùng 3/2 vì tính nhanh hơn. Vì vậy con cần biết đổi qua đổi lại.</p>
+  </details>
+</main>
+
+<main class="sheet" id="pane-baitap" role="tabpanel" aria-labelledby="tab-baitap">
   <header>
     <h1>Hỗn số và phân số</h1>
-    <p class="hint">Gõ số vào mỗi ô trống. Bấm <b>Tab</b> hoặc <b>Enter</b> để sang ô tiếp theo. Làm xong thì bấm <b>Nộp bài</b>.<br>Nhớ: 1 = 2/2 = 3/3 = 4/4 = …</p>
+    <p class="hint">Gõ số vào mỗi ô trống. Bấm <b>Tab</b> hoặc <b>Enter</b> để sang ô tiếp theo. Làm xong thì bấm <b>Nộp bài</b>.<br>Nhớ: 1 = 2/2 = 3/3 = 4/4 = … <a href="#pizza" class="back" data-tab="pizza">Quên rồi? Xem lại bánh pizza</a></p>
   </header>
   <div id="levels"></div>
 </main>
@@ -178,7 +317,7 @@ document.getElementById("levels").innerHTML = LEVELS.map((lv, i) => `
     <ol>${lv.qs.map(q => `<li>${render(q)}<span class="mark" aria-hidden="true"></span></li>`).join("")}</ol>
   </section>`).join("");
 
-const inputs = [...document.querySelectorAll("input.box")];
+const inputs = [...document.querySelectorAll("#levels input.box")];
 const total = LEVELS.reduce((s, l) => s + l.qs.length, 0);
 const $ = id => document.getElementById(id);
 let submitted = false;
@@ -249,6 +388,526 @@ function reset() {
   window.scrollTo({ top: 0 });
   inputs[0].focus();
 }
+
+/* ---------- bài học bánh pizza ---------- */
+const fr = (n, d) => `<span class="frac"><span class="num">${n}</span><span class="bar-line"></span><span class="den">${d}</span></span>`;
+const mixed = (k, r, d) => r === 0 ? `<span>${k}</span>` : k === 0 ? fr(r, d) : `<span class="mixed"><span>${k}</span>${fr(r, d)}</span>`;
+const pt = (r, a) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
+const wedge = (r, a0, a1) => `M0 0 L${pt(r, a0)} A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${pt(r, a1)} Z`;
+const TOP = -Math.PI / 2;
+const SV = $("stage");
+
+// Hình một miếng bánh (gốc toạ độ là tâm bánh)
+function sliceShape(R, d, i, rot) {
+  const step = 2 * Math.PI / d, a0 = rot + i * step, a1 = a0 + step, am = (a0 + a1) / 2;
+  const dots = [[0.6, 0]];
+  if (d <= 4) dots.push([0.3, 0]);
+  if (d <= 3) dots.push([0.8, step * 0.22], [0.8, -step * 0.22]);
+  const pr = R * Math.max(0.06, 0.15 - d * 0.012);
+  return `<path class="crust" d="${wedge(R, a0, a1)}"/><path class="cheese" d="${wedge(R * 0.86, a0 + 0.05, a1 - 0.05)}"/>`
+    + dots.map(([r, o]) => `<circle class="pep" r="${pr.toFixed(1)}" cx="${(r * R * Math.cos(am + o)).toFixed(1)}" cy="${(r * R * Math.sin(am + o)).toFixed(1)}"/>`).join("");
+}
+function wholeShape(R) {
+  const P = [[0.5, -2.2], [0.55, -0.6], [0.2, 0.4], [0.62, 1.0], [0.6, 2.4], [0.25, 3.6], [0.66, 4.0], [0.45, 5.3]];
+  return `<circle class="crust" r="${R}"/><circle class="cheese" r="${R * 0.86}"/>`
+    + P.map(([r, a]) => `<circle class="pep" r="${(R * 0.1).toFixed(1)}" cx="${(r * R * Math.cos(a)).toFixed(1)}" cy="${(r * R * Math.sin(a)).toFixed(1)}"/>`).join("");
+}
+function svgFrac(x, y, n, d, s = 15) {
+  return `<g class="sfrac" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><circle r="${s * 1.25}"/>`
+    + `<text y="${-s * 0.25}" font-size="${s}">${n}</text><line x1="${-s * 0.5}" x2="${s * 0.5}" y1="${s * 0.05}" y2="${s * 0.05}"/><text y="${s * 0.95}" font-size="${s}">${d}</text></g>`;
+}
+
+const L = {};
+function layout() {
+  return SV.parentElement.clientWidth < 640 ? {
+    w: 460, h: 700, trayBox: [8, 8, 444, 392], plateBox: [8, 410, 444, 282],
+    tray4: [[120, 130], [340, 130], [120, 304], [340, 304]], R: 76, tray1: [230, 215], Rbig: 122,
+    slots: [[82, 578], [230, 578], [378, 578]], Rs: 64
+  } : {
+    w: 920, h: 470, trayBox: [8, 8, 444, 454], plateBox: [468, 8, 444, 454],
+    tray4: [[125, 135], [333, 135], [125, 343], [333, 343]], R: 88, tray1: [230, 245], Rbig: 140,
+    slots: [[585, 145], [795, 145], [690, 345]], Rs: 82
+  };
+}
+const inBox = (P, [x, y, w, h]) => P.x >= x && P.x <= x + w && P.y >= y && P.y <= y + h;
+
+function drawStage() {
+  const Y = L.Y = layout();
+  SV.setAttribute("viewBox", `0 0 ${Y.w} ${Y.h}`);
+  const [tx, ty, tw, th] = Y.trayBox, [px, py, pw, ph] = Y.plateBox;
+  let s = `<rect class="zone-tray" x="${tx}" y="${ty}" width="${tw}" height="${th}" rx="16"/><text class="zone" x="${tx + 16}" y="${ty + 28}">Trên bàn</text>`
+    + `<rect class="zone-plate" id="plateZone" x="${px}" y="${py}" width="${pw}" height="${ph}" rx="16"/><text class="zone" x="${px + 16}" y="${py + 28}">Đĩa của con</text>`;
+  const one = L.tray.length === 1;
+  L.tray.forEach((p, pi) => {
+    const [cx, cy] = one ? Y.tray1 : Y.tray4[pi], R = one ? Y.Rbig : Y.R;
+    Object.assign(p, { cx, cy, R });
+    s += `<circle class="board-plate" cx="${cx}" cy="${cy}" r="${R + 8}"/>`;
+    if (!p.d) {
+      s += `<g class="${p.cuttable ? "cuttable" : ""}" transform="translate(${cx} ${cy})">${wholeShape(R)}</g>`;
+      if (L.guide) s += `<line class="guide" x1="${cx}" y1="${cy - R - 16}" x2="${cx}" y2="${cy + R + 16}"/>`;
+      return;
+    }
+    const step = 2 * Math.PI / p.d, gap = R * 0.05;
+    for (let i = 0; i < p.d; i++) {
+      const am = p.rot + (i + 0.5) * step;
+      if (!p.has[i] || (L.drag && L.drag.from === "tray" && L.drag.p === pi && L.drag.i === i)) {
+        s += `<path class="empty" transform="translate(${cx} ${cy})" d="${wedge(R, p.rot + i * step, p.rot + (i + 1) * step)}"/>`;
+        continue;
+      }
+      const gx = gap * Math.cos(am), gy = gap * Math.sin(am);
+      s += `<g class="slice${L.canTake ? " grab" : ""}" data-p="${pi}" data-i="${i}" transform="translate(${cx} ${cy})">`
+        + `<g class="${p.fresh ? "sep" : ""}" style="transform:translate(${gx.toFixed(1)}px,${gy.toFixed(1)}px)">${sliceShape(R, p.d, i, p.rot)}</g></g>`;
+      if (L.labels) s += svgFrac(cx + R * 0.58 * Math.cos(am), cy + R * 0.58 * Math.sin(am), 1, p.d, R > 100 ? 18 : 14);
+    }
+    p.fresh = false;
+  });
+  // đĩa: các ô xếp miếng, đủ miếng thì thành 1 cái bánh nguyên
+  const { n, d } = L.plate, dragK = L.drag && L.drag.from === "plate" ? n - 1 : -1;
+  Y.slots.forEach(([cx, cy], j) => {
+    const f = Math.max(0, Math.min(d, n - j * d)), whole = f === d;
+    s += `<circle class="slot${whole ? " whole" : ""}" cx="${cx}" cy="${cy}" r="${Y.Rs + 6}"/>`;
+    const step = 2 * Math.PI / d;
+    for (let i = 0; i < d; i++) {
+      const k = j * d + i;
+      if (i >= f || k === dragK) { s += `<path class="empty faint" transform="translate(${cx} ${cy})" d="${wedge(Y.Rs, TOP + i * step, TOP + (i + 1) * step)}"/>`; continue; }
+      s += `<g class="slice${L.canReturn ? " grab" : ""}" data-k="${k}" transform="translate(${cx} ${cy})"><g class="${k === L.pop ? "pop" : ""}">${sliceShape(Y.Rs, d, i, TOP)}</g></g>`;
+    }
+    if (whole) s += `<g class="badge" transform="translate(${cx + Y.Rs * 0.78} ${cy - Y.Rs * 0.78})"><g class="whole-b"><circle r="17"/><text y="6">1</text></g></g>`;
+    else if (f > 0 && L.badges) s += svgFrac(cx + Y.Rs * 0.8, cy - Y.Rs * 0.8, f, d, 13);
+  });
+  L.pop = -1;
+  s += `<line id="stroke" class="stroke" x1="0" y1="0" x2="0" y2="0" visibility="hidden"/><g id="float"></g>`;
+  if (L.cutFx) { const [a, b] = L.cutFx; s += `<line class="cutfx" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`; L.cutFx = null; }
+  SV.innerHTML = s;
+  SV.classList.toggle("cutting", !!L.canCut);
+}
+
+/* lời nhân vật, bảng số, nút */
+function say(html, mood = "happy") {
+  const p = $("tsay"); p.innerHTML = html;
+  const av = $("avatar"); av.setAttribute("class", "avatar " + mood);
+  p.classList.remove("in"); void p.offsetWidth; p.classList.add("in");
+}
+const board = html => { $("board").innerHTML = html; };
+function actions(list) {
+  const box = $("actions"); box.innerHTML = "";
+  list.forEach(([label, fn, cls = "primary"]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = cls; b.innerHTML = label;
+    b.addEventListener("click", fn); box.appendChild(b);
+  });
+}
+function annotated(n, d, top, bottom) {
+  return `<div class="annot"><span class="bigf">${fr(n, d)}</span><span class="notes"><span>← ${top}</span><span>← ${bottom}</span></span></div>`;
+}
+function chain(n, d) {
+  const k = Math.floor(n / d), r = n % d;
+  const plus = a => a.join(`<span class="op">+</span>`);
+  const groups = [fr(n, d)];
+  if (k >= 1) {
+    groups.push(plus(Array(k).fill(fr(d, d)).concat(r ? [fr(r, d)] : [])));
+    groups.push(plus(Array(k).fill("<span>1</span>").concat(r ? [fr(r, d)] : [])));
+    if (r && k > 0) groups.push(mixed(k, r, d));
+  }
+  return `<div class="chain">${groups.map((g, i) => `${i ? `<span class="op grp" style="--i:${i}">=</span>` : ""}<span class="grp" style="--i:${i}">${g}</span>`).join("")}</div>`;
+}
+const live = () => `<div class="live">Trên đĩa: <b>${L.plate.n}</b> miếng</div>`;
+function setStep(t) { $("lstep").textContent = t; }
+
+/* trạng thái ban đầu của từng phần */
+const uncut = () => ({ d: 0, has: [], rot: TOP, cuttable: true });
+const cutPizza = (d, full = true) => ({ d, has: Array(d).fill(full), rot: TOP, fresh: true });
+function resetLesson(state) {
+  Object.assign(L, { tray: [], plate: { n: 0, d: 2 }, canCut: false, canTake: false, canReturn: false, labels: false, badges: false,
+    guide: false, drag: null, stroke: null, cutFx: null, pop: -1, prevN: 0, inWhy: false, onPlate: null, onCut: null, firstAng: null }, state);
+}
+
+/* phần mở đầu: một đống miếng bánh khó đoán, ghép lại thành bánh nguyên thì thấy ngay */
+function scatterSpots(n, box, seed = 7) {
+  const [x, y, w, h] = box, cols = 4, rows = Math.ceil(n / cols);
+  let s = seed; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  return Array.from({ length: n }, (_, k) => ({
+    x: x + 70 + (k % cols + 0.5) * (w - 140) / cols + (rnd() - 0.5) * 40,
+    y: y + 70 + (Math.floor(k / cols) + 0.5) * (h - 110) / rows + (rnd() - 0.5) * 30,
+    rot: Math.floor(rnd() * 360),
+  }));
+}
+// groups: [{ n, d, slots, label }]; mỗi miếng nằm ở chỗ rải (spots) hoặc đã về ô bánh
+function drawGroups(groups, labels, assembled, spots) {
+  const Y = L.Y = layout();
+  SV.setAttribute("viewBox", `0 0 ${Y.w} ${Y.h}`);
+  SV.classList.remove("cutting");
+  const [tx, ty, tw, th] = Y.trayBox, [px, py, pw, ph] = Y.plateBox;
+  let s = `<rect class="zone-tray" x="${tx}" y="${ty}" width="${tw}" height="${th}" rx="16"/><text class="zone" x="${tx + 16}" y="${ty + 28}">${labels[0]}</text>`
+    + `<rect class="zone-plate" x="${px}" y="${py}" width="${pw}" height="${ph}" rx="16"/><text class="zone" x="${px + 16}" y="${py + 28}">${labels[1]}</text>`;
+  let k0 = 0;
+  groups.forEach(g => {
+    const step = 2 * Math.PI / g.d;
+    g.slots.forEach(([cx, cy]) => {
+      s += `<circle class="slot" cx="${cx}" cy="${cy}" r="${Y.Rs + 6}"/>`;
+      for (let i = 0; i < g.d; i++) s += `<path class="empty faint" transform="translate(${cx} ${cy})" d="${wedge(Y.Rs, TOP + i * step, TOP + (i + 1) * step)}"/>`;
+    });
+    for (let k = 0; k < g.n; k++) {
+      const [cx, cy] = g.slots[Math.floor(k / g.d)], sp = spots && spots[k0 + k];
+      const tf = assembled || !sp ? `translate(${cx}px,${cy}px)` : `translate(${sp.x.toFixed(1)}px,${sp.y.toFixed(1)}px) rotate(${sp.rot}deg) scale(.85)`;
+      s += `<g class="fly" data-k="${k0 + k}" data-to="translate(${cx}px,${cy}px)" style="transform:${tf}">${sliceShape(Y.Rs, g.d, k % g.d, TOP)}</g>`;
+    }
+    if (assembled) g.slots.forEach(([cx, cy], j) => {
+      const f = Math.max(0, Math.min(g.d, g.n - j * g.d));
+      if (f === g.d) s += `<g class="badge" transform="translate(${cx + Y.Rs * 0.78} ${cy - Y.Rs * 0.78})"><g class="whole-b"><circle r="17"/><text y="6">1</text></g></g>`;
+      else if (f > 0) s += svgFrac(cx + Y.Rs * 0.8, cy - Y.Rs * 0.8, f, g.d, 13);
+    });
+    k0 += g.n;
+  });
+  SV.innerHTML = s;
+}
+const WHY = { n: 11, d: 4 };
+function stageWhy() {
+  setStep("Phần 1/5 · Nhiều hay ít?");
+  resetLesson({ inWhy: true });
+  const Y = layout();
+  L.scatter = scatterSpots(WHY.n, Y.trayBox);
+  drawGroups([{ n: WHY.n, d: WHY.d, slots: Y.slots }], ["Trên bàn", "Ghép thành bánh"], false, L.scatter);
+  say(`Mẹ để trên bàn <b>11 miếng bánh</b>. Mỗi miếng là <b>1/4</b> cái bánh (bánh cắt làm 4). Vậy trên bàn có <b>11/4</b> cái bánh.<br>Đố con: nhìn đống này, <b>được khoảng mấy cái bánh?</b>`);
+  board(`<div class="target">Trên bàn có <span class="math">${fr(11, 4)}</span> cái bánh</div>`);
+  actions([1, 2, 3, 4].map(g => [`${g} cái`, () => guessWhy(g), "ghost"]));
+}
+function guessWhy(g) {
+  L.guess = g;
+  say("Khó đoán đúng không? Số <b>11/4</b> nhìn thì biết là 11 miếng, nhưng <b>không biết ngay là mấy cái bánh</b>. Mình ghép các miếng lại thành bánh nguyên xem nào!", "oops");
+  actions([["Ghép lại", assembleWhy]]);
+}
+function assembleWhy() {
+  actions([]);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  SV.querySelectorAll(".fly").forEach(el => {
+    el.style.transitionDelay = reduce ? "0s" : `${+el.dataset.k * 0.12}s`;
+    el.style.transform = el.dataset.to;
+  });
+  setTimeout(() => {
+    const Y = layout();
+    drawGroups([{ n: WHY.n, d: WHY.d, slots: Y.slots }], ["Trên bàn", "Ghép thành bánh"], true, null);
+    const g = L.guess;
+    say((g === 3 ? "Con đoán giỏi lắm! " : g === 2 ? "Con đoán gần đúng! " : "")
+      + "Ghép lại thì thấy ngay: <b>2 cái bánh nguyên</b> và <b>3/4 cái</b> nữa, tức là <b>2 3/4</b> cái bánh, gần 3 cái.<br>Viết <b>2 3/4</b> thì nhìn là biết ngay có mấy cái bánh. Đó là lý do người ta đổi 11/4 thành hỗn số.", "wow");
+    board(chain(WHY.n, WHY.d));
+    actions([["Đố tiếp", compareWhy]]);
+  }, reduce ? 50 : WHY.n * 120 + 1000);
+}
+function compareWhy() {
+  L.inWhy = true;
+  const Y = layout(), dx = Y.trayBox[0] - Y.plateBox[0], dy = Y.trayBox[1] - Y.plateBox[1];
+  L.cmp = [{ n: 11, d: 4 }, { n: 5, d: 2 }];
+  L.cmpSlots = Y.slots.map(([x, y]) => [x + dx, y + dy]);
+  const Y2 = Y;
+  say("Đố con: <b>11/4</b> cái bánh và <b>5/2</b> cái bánh, bên nào <b>nhiều bánh hơn</b>?");
+  board(`<div class="chain">${fr(11, 4)}<span class="op">hay</span>${fr(5, 2)}</div>`);
+  actions([[`<span class="math">${fr(11, 4)}</span>`, () => answerCmp(0), "ghost"], [`<span class="math">${fr(5, 2)}</span>`, () => answerCmp(1), "ghost"]]);
+  // vẽ sẵn hai đống miếng rải trên hai bên bàn, chưa ghép
+  const spots = scatterSpots(11, Y2.trayBox, 3).concat(scatterSpots(5, Y2.plateBox, 11));
+  drawGroups([{ n: 11, d: 4, slots: L.cmpSlots }, { n: 5, d: 2, slots: Y2.slots }], ["11/4 cái bánh", "5/2 cái bánh"], false, spots);
+}
+function answerCmp(pick) {
+  const ok = pick === 0;
+  actions([]);
+  SV.querySelectorAll(".fly").forEach(el => { el.style.transitionDelay = `${(+el.dataset.k % 11) * 0.08}s`; el.style.transform = el.dataset.to; });
+  setTimeout(() => {
+    const Y = layout();
+    drawGroups([{ n: 11, d: 4, slots: L.cmpSlots }, { n: 5, d: 2, slots: Y.slots }], ["11/4 cái bánh", "5/2 cái bánh"], true, null);
+    say((ok ? "Đúng rồi! " : "Chưa đúng, nhìn kỹ nhé: ")
+      + "Ghép lại: <b>11/4 = 2 3/4</b> và <b>5/2 = 2 1/2</b>. Bên nào cũng có 2 cái bánh nguyên, nhưng <b>3/4 cái nhiều hơn 1/2 cái</b>, nên 11/4 nhiều hơn.<br>Viết kiểu hỗn số thì so sánh dễ hơn hẳn!", ok ? "wow" : "oops");
+    board(`<div class="chain">${fr(11, 4)}<span class="op">=</span>${mixed(2, 3, 4)}<span class="op">&gt;</span>${mixed(2, 1, 2)}<span class="op">=</span>${fr(5, 2)}</div>`);
+    actions([["Còn 11/4 dùng khi nào?", () => say("Khi làm tính <b>nhân, chia</b> phân số thì viết 11/4 tính nhanh hơn. Còn khi muốn biết <b>nhiều hay ít, được mấy cái bánh</b> thì viết 2 3/4. Vì vậy con cần biết đổi qua đổi lại!"), "ghost"], ["Học cắt bánh", stageCut1]]);
+  }, 2400);
+}
+
+function stageCut1() {
+  setStep("Phần 2/5 · Cắt bánh");
+  resetLesson({ tray: [uncut()], canCut: true, guide: true, onCut: cut1 });
+  drawStage();
+  say("Chào con! Đây là <b>1 cái bánh</b> nguyên. Con hãy dùng chuột (hoặc ngón tay) <b>kéo một đường thẳng qua giữa bánh</b> để cắt nó làm 2 phần bằng nhau nhé.");
+  board(`<div class="live">1 cái bánh nguyên</div>`); actions([]);
+}
+function cut1(ang) {
+  const p = L.tray[0];
+  Object.assign(p, cutPizza(2), { rot: ang });
+  Object.assign(L, { canCut: false, guide: false, labels: true });
+  drawStage();
+  say("Tuyệt! Bánh được chia thành <b>2 miếng bằng nhau</b>. Mỗi miếng là <b>một nửa</b> cái bánh, viết là <b>1/2</b>.", "wow");
+  board(annotated(1, 2, "lấy 1 miếng", "bánh cắt thành 2 miếng bằng nhau"));
+  actions([["Tiếp", stageTake1]]);
+}
+function stageTake1() {
+  setStep("Phần 3/5 · Lấy bánh");
+  Object.assign(L, { canTake: true, onPlate: take1 });
+  drawStage();
+  say("Bây giờ con <b>kéo 1 miếng bánh sang đĩa</b> của con nhé. (Bấm vào miếng bánh cũng được.)");
+  board(live()); actions([]);
+}
+function take1() {
+  L.canTake = false; drawStage();
+  say("Con có <b>1 miếng</b>, mà cái bánh được cắt thành <b>2 miếng</b>. Vậy con có <b>1/2</b> cái bánh.<br>Số <b>ở trên</b> là số miếng con có. Số <b>ở dưới</b> là bánh được cắt thành mấy miếng.");
+  board(annotated(1, 2, "con có 1 miếng", "bánh cắt thành 2 miếng"));
+  actions([["Tiếp", stageTake3]]);
+}
+function stageTake3() {
+  L.tray.push(cutPizza(2));
+  Object.assign(L, { labels: false, canTake: true, badges: false, onPlate: take3 });
+  drawStage();
+  say("Trên bàn có thêm 1 cái bánh đã cắt đôi sẵn. Con <b>lấy thêm 2 miếng</b> để trên đĩa có 3 miếng nhé.");
+  board(`<div class="annot"><span class="bigf">${fr(1, 2)}</span><span class="notes"><span>con có 1/2 cái bánh</span></span></div>`);
+  actions([]);
+}
+function take3() {
+  const n = L.plate.n;
+  if (n === 2) {
+    say("Ồ, nhìn đĩa kìa! <b>2 miếng nửa ghép lại vừa khít 1 cái bánh nguyên.</b> Vậy 2/2 = 1. Lấy thêm 1 miếng nữa nào!", "wow");
+    board(`<div class="chain">${fr(2, 2)}<span class="op">=</span><span>1</span></div>`);
+    return;
+  }
+  if (n < 3) { board(`<div class="annot"><span class="bigf">${fr(n, 2)}</span></div>`); return; }
+  L.canTake = false; drawStage();
+  say("Con có <b>3 miếng nửa bánh</b>, đếm theo miếng là <b>3/2</b>. Nhưng nhìn đĩa: có <b>1 cái bánh nguyên và 1 nửa</b>, nên cũng viết là <b>1 1/2</b>. Cùng một lượng bánh, chỉ khác cách đếm!", "wow");
+  board(chain(3, 2));
+  actions([["Sao phải viết 1 1/2?", why, "ghost"], ["Tiếp", stageCut4]]);
+}
+function why() {
+  say("Viết 3/2 cũng đúng! Nhưng nói <b>“1 cái bánh rưỡi”</b> thì ai nghe cũng hình dung ngay, giống nói <b>“1 giờ rưỡi”</b> thay vì “90 phút”. Lên lớp trên, khi nhân chia phân số, người ta lại hay dùng 3/2. Nên con cần biết <b>đổi qua đổi lại</b>.");
+}
+function stageCut4() {
+  setStep("Phần 4/5 · Cắt 4 miếng");
+  resetLesson({ tray: [uncut()], plate: { n: 0, d: 4 }, canCut: true, onCut: cut4 });
+  drawStage();
+  say("Bánh mới đây! Lần này con chia bánh thành <b>4 miếng bằng nhau</b>. Cần cắt mấy đường nhỉ? Con thử đi!");
+  board(`<div class="live">1 cái bánh nguyên</div>`); actions([]);
+}
+function cut4(ang) {
+  const p = L.tray[0];
+  if (L.firstAng == null) {
+    L.firstAng = ang;
+    Object.assign(p, cutPizza(2), { rot: ang });
+    drawStage();
+    say("Mới được <b>2 miếng</b> thôi. Muốn có 4 miếng bằng nhau thì cắt thêm một đường nữa, <b>cắt ngang qua đường cũ</b>.", "oops");
+    return;
+  }
+  let diff = Math.abs(((ang - L.firstAng) % Math.PI + Math.PI) % Math.PI);
+  diff = Math.min(diff, Math.PI - diff);
+  if (diff < 0.9) { say("Đường này gần giống đường cũ quá, cắt ra sẽ có miếng to miếng bé. Con cắt <b>ngang qua</b> đường cũ, thành hình dấu cộng nhé.", "oops"); return; }
+  Object.assign(p, cutPizza(4), { rot: L.firstAng });
+  Object.assign(L, { canCut: false, labels: true });
+  drawStage();
+  say("Đúng rồi! Cắt 2 đường được <b>4 miếng bằng nhau</b>. Mỗi miếng là <b>1/4</b> cái bánh, đọc là “một phần tư”.", "wow");
+  board(annotated(1, 4, "1 miếng", "bánh cắt thành 4 miếng"));
+  actions([["Chơi đố thôi!", startPlay]]);
+}
+
+/* phần đố: lấy đúng lượng bánh rồi đổi sang cách viết kia */
+const PRAISE = ["Giỏi quá!", "Chính xác!", "Đúng rồi!", "Tuyệt vời!", "Con làm hay lắm!"];
+// Mỗi cấp một kiểu cắt bánh; đúng liền NEED câu (không sai lần nào) mới lên cấp
+const QLEVELS = [
+  { ds: [2], kmax: 2, name: "cắt 2 miếng" },
+  { ds: [2, 4], kmax: 2, name: "cắt 2 hoặc 4 miếng" },
+  { ds: [3], kmax: 2, name: "cắt 3 miếng" },
+  { ds: [5, 6], kmax: 2, name: "cắt 5 hoặc 6 miếng" },
+  { ds: [7, 8], kmax: 2, name: "cắt 7 hoặc 8 miếng" },
+  { ds: [9], kmax: 2, name: "cắt 9 miếng" },
+  { ds: [2, 3, 4, 5, 6, 7, 8, 9], kmax: 2, name: "đủ kiểu, từ 2 đến 9 miếng" },
+];
+const NEED = 5;
+function saveLv() { try { localStorage.setItem("pizzaLv", JSON.stringify({ level: L.level, streak: L.streak })); } catch (e) {} }
+function startPlay() {
+  if (L.level == null) {
+    let s = null; try { s = JSON.parse(localStorage.getItem("pizzaLv")); } catch (e) {}
+    L.level = s && s.level >= 0 ? Math.min(s.level, QLEVELS.length - 1) : 0; L.streak = s && s.streak > 0 ? s.streak : 0;
+  }
+  L.count = L.count || 0; newTask();
+}
+const dots = () => "●".repeat(L.streak) + "○".repeat(NEED - L.streak);
+function newTask() {
+  const Q = QLEVELS[L.level], ds = Q.ds;
+  let d, k, r, type, guard = 0;
+  do {
+    d = ds[Math.floor(Math.random() * ds.length)];
+    k = 1 + Math.floor(Math.random() * Q.kmax);
+    r = 1 + Math.floor(Math.random() * (d - 1));
+    type = L.count % 2 ? "B" : "A";
+  } while (guard++ < 30 && L.task && L.task.d === d && L.task.k === k && L.task.r === r);
+  const n = k * d + r;
+  L.task = { d, k, r, n, type, tries: 0, ctries: 0 };
+  const pizzas = Math.min(4, Math.ceil(n / d) + 1);
+  resetLesson({ tray: Array.from({ length: pizzas }, () => cutPizza(d)), plate: { n: 0, d }, canTake: true, canReturn: true, badges: true, onPlate: playChange });
+  setStep(`Đố con · Cấp ${L.level + 1}/${QLEVELS.length} · ${dots()}`);
+  drawStage();
+  const want = type === "A" ? `<b>${n}/${d}</b>` : `<b>${k} ${r}/${d}</b>`;
+  const intro = L.newLevel ? `<b>Cấp ${L.level + 1}:</b> bánh ${Q.name}. ` : ""; L.newLevel = false;
+  say(intro + `Lấy cho mình ${want} cái bánh nhé. Kéo miếng bánh sang đĩa, kéo ngược lại nếu lấy thừa. Xong thì bấm <b>Xong rồi</b>.` + (L.count === 0 ? ` Đúng liền ${NEED} câu, không sai lần nào, là lên cấp!` : ""), "happy");
+  board(`<div class="target">Cần lấy: <span class="math">${type === "A" ? fr(n, d) : mixed(k, r, d)}</span></div>` + live());
+  actions([["Xong rồi", checkPlate]]);
+}
+function playChange() {
+  const t = L.task;
+  $("board").querySelector(".live").innerHTML = `Trên đĩa: <b>${L.plate.n}</b> miếng`;
+  const up = L.plate.n > (L.prevN || 0); L.prevN = L.plate.n;
+  if (up && L.plate.n % t.d === 0 && L.plate.n <= t.n) say(`Thêm được <b>1 cái bánh nguyên</b> rồi! (${t.d} miếng ghép lại)`, "wow");
+}
+function checkPlate() {
+  const t = L.task, n = L.plate.n;
+  if (n === t.n) {
+    Object.assign(L, { canTake: false, canReturn: false }); drawStage();
+    say(`${PRAISE[Math.floor(Math.random() * PRAISE.length)]} Giờ con nhìn đĩa và <b>viết theo cách còn lại</b> nhé:`, "wow");
+    const box = id => `<input class="box" id="${id}" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="ô trống">`;
+    board(t.type === "A"
+      ? `<div class="chain">${fr(t.n, t.d)}<span class="op">=</span><span class="mixed">${box("cw")}<span class="frac"><span class="num">${box("cr")}</span><span class="bar-line"></span><span class="den">${t.d}</span></span></span></div>`
+      : `<div class="chain">${mixed(t.k, t.r, t.d)}<span class="op">=</span><span class="frac"><span class="num">${box("cn")}</span><span class="bar-line"></span><span class="den">${t.d}</span></span></div>`);
+    const ids = t.type === "A" ? ["cw", "cr"] : ["cn"];
+    ids.forEach((id, i) => {
+      const el = $(id);
+      el.addEventListener("input", () => { el.value = el.value.replace(/\D/g, ""); el.classList.remove("ok", "bad"); });
+      el.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); ids[i + 1] ? $(ids[i + 1]).focus() : checkConvert(); } });
+    });
+    actions([["Kiểm tra", checkConvert]]);
+    $(ids[0]).focus();
+    return;
+  }
+  t.tries++;
+  if (n < t.n) {
+    if (t.type === "B" && n === t.k + t.r) {
+      say(`À, con lấy ${n} miếng vì thấy số ${t.k} và số ${t.r} đúng không? Nhưng <b>${t.k} ${t.r}/${t.d}</b> nghĩa là <b>${t.k} cái bánh nguyên</b> (mỗi cái ${t.d} miếng) và thêm ${t.r} miếng nữa. Con lấy tiếp nhé!`, "oops");
+    } else if (t.tries === 1) say("Chưa đủ đâu. Con đếm lại các miếng trên đĩa xem.", "oops");
+    else say(`Trên đĩa mới có <b>${n}/${t.d}</b>, còn thiếu <b>${t.n - n} miếng</b>.` + (t.type === "B" ? ` Nhớ: ${t.k} cái bánh nguyên là ${t.k * t.d} miếng, thêm ${t.r} miếng.` : ""), "oops");
+  } else {
+    say(t.tries === 1 ? "Nhiều quá rồi! Con kéo bớt miếng từ đĩa trả lại bàn nhé." : `Thừa <b>${n - t.n} miếng</b> rồi. Kéo miếng trên đĩa trả lại bàn nhé.`, "oops");
+  }
+}
+function checkConvert() {
+  const t = L.task;
+  const ok = (id, v) => { const el = $(id), good = el.value.trim() === String(v); el.classList.toggle("ok", good); el.classList.toggle("bad", !good); return good; };
+  let right;
+  if (t.type === "A") { const a = ok("cw", t.k), b = ok("cr", t.r); right = a && b; if (!right) t.ctries++;
+    if (!right && t.ctries < 3) say(!a ? `Trên đĩa có mấy cái bánh <b>đủ cả ${t.d} miếng</b>? Đó là số to đứng trước.` : "Cái bánh <b>chưa đủ</b> có mấy miếng? Đó là số ở trên.", "oops");
+  } else { right = ok("cn", t.n); if (!right) t.ctries++;
+    if (!right && t.ctries < 3) say(t.ctries === 1 ? "Đếm hết <b>tất cả</b> các miếng trên đĩa nhé." : `Mỗi cái bánh nguyên có ${t.d} miếng: ${t.k} × ${t.d} = ${t.k * t.d}, thêm ${t.r} miếng nữa là bao nhiêu?`, "oops");
+  }
+  if (!right && t.ctries < 3) return;
+  L.count++;
+  const clean = right && t.tries === 0 && t.ctries === 0, last = L.level === QLEVELS.length - 1;
+  let up = false;
+  if (clean) { L.streak = Math.min(NEED, L.streak + 1); if (L.streak >= NEED && !last) { L.level++; L.streak = 0; up = L.newLevel = true; } }
+  else L.streak = 0;
+  saveLv();
+  const same = `<b>${t.n}/${t.d}</b> và <b>${t.k} ${t.r}/${t.d}</b> là cùng một lượng bánh.`;
+  let msg;
+  if (up) msg = `🎉 <b>Đúng liền ${NEED} câu, lên cấp ${L.level + 1}!</b> Từ giờ bánh ${QLEVELS[L.level].name}.`;
+  else if (clean) msg = `${PRAISE[Math.floor(Math.random() * PRAISE.length)]} ${same} ` + (last && L.streak >= NEED ? "Con đã qua hết các cấp, giỏi quá!" : `Đúng liền ${L.streak}/${NEED} câu.`);
+  else if (right) msg = `Đúng rồi, ${same} Nhưng câu này con có sửa lại, nên chuỗi đúng liền bắt đầu lại từ 0 nhé.`;
+  else msg = `Không sao, mình cùng xem nhé: ${t.k} cái bánh nguyên là ${t.k * t.d} miếng, thêm ${t.r} miếng là ${t.n} miếng. Chuỗi đúng liền bắt đầu lại từ 0.`;
+  say(msg, clean ? "wow" : "happy");
+  setStep(`Đố con · Cấp ${L.level + 1}/${QLEVELS.length} · ${dots()}`);
+  board(chain(t.n, t.d));
+  actions([[up ? "Sang cấp mới" : "Câu tiếp", newTask]]);
+}
+
+/* kéo, thả, cắt */
+function svgPt(e) { const p = SV.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(SV.getScreenCTM().inverse()); }
+function segDist(c, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y, l2 = dx * dx + dy * dy || 1;
+  const t = Math.max(0, Math.min(1, ((c.x - a.x) * dx + (c.y - a.y) * dy) / l2));
+  return Math.hypot(c.x - a.x - t * dx, c.y - a.y - t * dy);
+}
+function moveToPlate(pi, i) {
+  L.tray[pi].has[i] = false; L.plate.n++; L.pop = L.plate.n - 1; drawStage(); L.onPlate && L.onPlate();
+}
+function moveToTray() {
+  L.plate.n--;
+  const p = L.tray.find(p => p.has.some(h => !h)); if (p) p.has[p.has.indexOf(false)] = true;
+  drawStage(); L.onPlate && L.onPlate();
+}
+function drawFloat() {
+  const D = L.drag, f = SV.querySelector("#float"); if (!D || !f) return;
+  f.setAttribute("transform", `translate(${D.ox + D.cur.x - D.start.x} ${D.oy + D.cur.y - D.start.y})`);
+  f.innerHTML = `<g class="lift">${D.shape}</g>`;
+  const over = inBox(D.cur, L.Y.plateBox);
+  $("plateZone") && $("plateZone").classList.toggle("hot", D.from === "tray" ? over : !over);
+}
+SV.addEventListener("pointerdown", e => {
+  const P = svgPt(e);
+  if (L.canCut) {
+    const p = L.tray[0];
+    if (Math.hypot(P.x - p.cx, P.y - p.cy) > p.R + 60) return;
+    e.preventDefault(); SV.setPointerCapture(e.pointerId);
+    L.stroke = { a: P, b: P };
+    return;
+  }
+  const g = e.target.closest(".slice"); if (!g) return;
+  const Y = L.Y;
+  if (g.dataset.p != null && L.canTake) {
+    const p = L.tray[+g.dataset.p], i = +g.dataset.i;
+    L.drag = { from: "tray", p: +g.dataset.p, i, start: P, cur: P, ox: p.cx, oy: p.cy, shape: sliceShape(p.R, p.d, i, p.rot) };
+  } else if (g.dataset.k != null && L.canReturn && L.plate.n > 0) {
+    const k = L.plate.n - 1, d = L.plate.d, [cx, cy] = Y.slots[Math.floor(k / d)];
+    L.drag = { from: "plate", start: P, cur: P, ox: cx, oy: cy, shape: sliceShape(Y.Rs, d, k % d, TOP) };
+  } else return;
+  e.preventDefault(); SV.setPointerCapture(e.pointerId);
+  drawStage(); drawFloat();
+});
+SV.addEventListener("pointermove", e => {
+  if (L.stroke) {
+    L.stroke.b = svgPt(e);
+    const ln = SV.querySelector("#stroke"), { a, b } = L.stroke;
+    ln.setAttribute("x1", a.x); ln.setAttribute("y1", a.y); ln.setAttribute("x2", b.x); ln.setAttribute("y2", b.y); ln.setAttribute("visibility", "visible");
+    return;
+  }
+  if (!L.drag) return;
+  L.drag.cur = svgPt(e); drawFloat();
+});
+function endPointer(e) {
+  if (L.stroke) {
+    const { a, b } = L.stroke; L.stroke = null;
+    const ln = SV.querySelector("#stroke"); if (ln) ln.setAttribute("visibility", "hidden");
+    if (e.type === "pointercancel") return;
+    const p = L.tray[0], len = Math.hypot(b.x - a.x, b.y - a.y);
+    if (len < 8) return;
+    if (len < p.R * 1.5) { say("Đường cắt <b>ngắn quá</b>. Con kéo một đường dài, cắt hết từ mép bên này sang mép bên kia nhé.", "oops"); return; }
+    if (segDist({ x: p.cx, y: p.cy }, a, b) > p.R * 0.22) { say("Đường cắt <b>chưa đi qua giữa bánh</b>, nên 2 miếng sẽ to nhỏ khác nhau. Cắt qua chính giữa nhé!", "oops"); return; }
+    L.cutFx = [a, b];
+    L.onCut(Math.atan2(b.y - a.y, b.x - a.x));
+    return;
+  }
+  const D = L.drag; if (!D) return;
+  L.drag = null;
+  const moved = Math.hypot(D.cur.x - D.start.x, D.cur.y - D.start.y) > 8, over = inBox(D.cur, L.Y.plateBox);
+  if (e.type === "pointercancel") { drawStage(); return; }
+  if (D.from === "tray" && (!moved || over)) moveToPlate(D.p, D.i);
+  else if (D.from === "plate" && (!moved || !over)) moveToTray();
+  else drawStage();
+}
+SV.addEventListener("pointerup", endPointer);
+SV.addEventListener("pointercancel", endPointer);
+let lastPortrait = null;
+addEventListener("resize", () => { const pr = SV.parentElement.clientWidth < 640; if (pr !== lastPortrait) { lastPortrait = pr; if (L.tray && !L.inWhy) drawStage(); } });
+
+$("lrestart").addEventListener("click", () => { L.task = null; stageWhy(); });
+$("lskip").addEventListener("click", startPlay);
+
+/* ---------- tab ---------- */
+function showTab(t) {
+  if (t !== "pizza" && t !== "baitap") t = "pizza";
+  ["pizza", "baitap"].forEach(x => {
+    $("pane-" + x).hidden = x !== t;
+    $("tab-" + x).setAttribute("aria-selected", String(x === t));
+  });
+  document.querySelector(".dock").hidden = t !== "baitap";
+  if (t === "pizza" && L.tray && !L.inWhy) drawStage();
+  try { history.replaceState(null, "", "#" + t); } catch (e) {}
+  try { localStorage.setItem("tab", t); } catch (e) {}
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-tab]"); if (!b) return;
+  e.preventDefault(); showTab(b.dataset.tab); window.scrollTo({ top: 0 });
+});
+stageWhy();
+let startTab = location.hash.slice(1);
+if (!startTab) { try { startTab = localStorage.getItem("tab"); } catch (e) {} }
+showTab(startTab);
 
 $("submit").addEventListener("click", grade);
 $("reveal").addEventListener("click", reveal);
