@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}</style>
+<title>Phiếu Hỗn Số</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: một tờ bài làm, mỗi mức là một khối, mỗi câu một dòng; thanh nộp bài dính ở đáy */
+:root {
+  --bg: #fbfaf6;
+  --paper: #ffffff;
+  --ink: #23303b;
+  --muted: #6b7782;
+  --line: #d9dee2;
+  --accent: #2f7d6d;
+  --accent-ink: #ffffff;
+  --box: #9aa8b2;
+  --chip: #e6f2ee;
+  --ok: #2e8b4e;
+  --ok-bg: #e5f4ea;
+  --bad: #c2412d;
+  --bad-bg: #fbe8e4;
+  --display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --body: "Nunito", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161b1f; --paper: #1e2429; --ink: #e8ecef; --muted: #9aa6af; --line: #344048;
+  --accent: #6cc4b0; --accent-ink: #10201b; --box: #6f7f8a; --chip: #23362f;
+  --ok: #6fd08f; --ok-bg: #1d3526; --bad: #f08a76; --bad-bg: #3b221d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161b1f; --paper: #1e2429; --ink: #e8ecef; --muted: #9aa6af; --line: #344048;
+  --accent: #6cc4b0; --accent-ink: #10201b; --box: #6f7f8a; --chip: #23362f;
+  --ok: #6fd08f; --ok-bg: #1d3526; --bad: #f08a76; --bad-bg: #3b221d; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; padding: 24px 16px 110px; }
+.sheet { max-width: 860px; margin: 0 auto; background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 32px clamp(16px, 4vw, 44px); }
+
+header { display: grid; gap: 12px; border-bottom: 2px solid var(--ink); padding-bottom: 16px; margin-bottom: 8px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: 30px; margin: 0; text-wrap: balance; }
+.hint { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.hint b { color: var(--ink); }
+
+section { padding-top: 22px; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 19px; margin: 0 0 4px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+h2 .lv { background: var(--chip); color: var(--accent); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; }
+h2 .lvscore { margin-left: auto; font-family: var(--body); font-size: 14px; font-weight: 700; color: var(--muted); }
+.task { margin: 0 0 8px; color: var(--muted); font-size: 15px; }
+
+ol { list-style: none; margin: 0; padding: 0; counter-reset: q; }
+ol li { counter-increment: q; display: flex; gap: 12px; align-items: center; padding: 10px 8px; border-bottom: 1px dashed var(--line); border-radius: 4px; }
+ol li:last-child { border-bottom: 0; }
+ol li::before { content: counter(q) "."; font-family: var(--display); font-weight: 700; color: var(--accent); min-width: 1.4em; }
+ol li .mark { margin-left: auto; font-size: 22px; font-weight: 800; min-width: 1em; text-align: center; }
+ol li.ok { background: var(--ok-bg); } ol li.ok .mark { color: var(--ok); }
+ol li.bad { background: var(--bad-bg); } ol li.bad .mark { color: var(--bad); }
+
+.eq { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; overflow-x: auto; min-width: 0; font-family: var(--display); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; padding: 4px 2px; }
+.op { color: var(--muted); padding: 0 1px; }
+.mixed { display: inline-flex; align-items: center; gap: 4px; }
+.frac { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 3px; }
+.frac .bar-line { width: 100%; min-width: 1.1em; height: 2px; background: var(--ink); }
+.frac > span { display: flex; align-items: center; justify-content: center; }
+.frac .num, .frac .den { font-size: 19px; }
+
+input.box { width: 1.9em; height: 1.6em; font: inherit; font-size: 20px; text-align: center; color: var(--ink); background: var(--paper);
+  border: 2px solid var(--box); border-radius: 5px; padding: 0; font-variant-numeric: tabular-nums; }
+.frac input.box { font-size: 17px; width: 1.9em; height: 1.45em; }
+input.box:focus { outline: 3px solid var(--chip); border-color: var(--accent); }
+input.box.ok { border-color: var(--ok); color: var(--ok); font-weight: 700; }
+input.box.bad { border-color: var(--bad); color: var(--bad); font-weight: 700; }
+.fix { display: block; font-size: 12px; font-family: var(--body); font-weight: 800; color: var(--ok); text-align: center; line-height: 1; margin-top: 2px; }
+.slot { display: inline-flex; flex-direction: column; align-items: center; }
+
+.dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--paper); border-top: 1px solid var(--line); }
+.dock-in { max-width: 860px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.result { font-family: var(--display); font-weight: 700; font-size: 18px; flex: 1 1 220px; min-width: 0; }
+.result small { display: block; font-family: var(--body); font-weight: 600; font-size: 14px; color: var(--muted); }
+button { font: inherit; font-weight: 800; font-size: 16px; border-radius: 6px; padding: 10px 18px; cursor: pointer; border: 2px solid var(--accent); }
+button.primary { background: var(--accent); color: var(--accent-ink); }
+button.ghost { background: transparent; color: var(--accent); }
+button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  h1 { font-size: 24px; }
+  .eq { font-size: 19px; }
+}
+@media print {
+  :root { --bg:#fff; --paper:#fff; --ink:#111; --muted:#555; --line:#bbb; --box:#555; color-scheme: light; }
+  body { padding: 0; } .dock { display: none; } .sheet { border: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<main class="sheet">
+  <header>
+    <h1>Hỗn số và phân số</h1>
+    <p class="hint">Gõ số vào mỗi ô trống. Bấm <b>Tab</b> hoặc <b>Enter</b> để sang ô tiếp theo. Làm xong thì bấm <b>Nộp bài</b>.<br>Nhớ: 1 = 2/2 = 3/3 = 4/4 = …</p>
+  </header>
+  <div id="levels"></div>
+</main>
+
+<div class="dock">
+  <div class="dock-in">
+    <div class="result" id="result" aria-live="polite">Chưa nộp bài<small id="progress"></small></div>
+    <button class="ghost" id="reset" type="button">Làm lại</button>
+    <button class="ghost" id="reveal" type="button" hidden>Xem đáp án</button>
+    <button class="primary" id="submit" type="button">Nộp bài</button>
+  </div>
+</div>
+
+<script>
+// Cú pháp: {x} là ô trống có đáp án x
+const LEVELS = [
+  { name: "Có 1 phần nguyên", task: "Tách hỗn số thành 1 cộng phân số, rồi viết 1 thành phân số.", qs: [
+    "1 1/2 = 1 + 1/2 = {2}/2 + 1/2",
+    "1 1/3 = 1 + {1}/3 = 3/3 + 1/3",
+    "1 2/5 = 1 + 2/5 = {5}/5 + {2}/5",
+    "1 3/4 = {1} + 3/4 = 4/4 + {3}/4",
+    "1 5/6 = 1 + {5}/{6} = 6/6 + 5/6" ]},
+  { name: "Có 2 phần nguyên", task: "Mỗi số 1 viết thành một phân số có cùng mẫu.", qs: [
+    "2 2/3 = 1 + 1 + 2/3 = {3}/3 + 3/3 + 2/3",
+    "2 1/4 = 1 + 1 + {1}/4 = 4/4 + {4}/4 + 1/4",
+    "2 3/5 = {1} + {1} + 3/5 = 5/5 + 5/5 + {3}/5",
+    "2 1/2 = 1 + 1 + 1/2 = {2}/{2} + {2}/{2} + 1/2",
+    "2 4/7 = 1 + 1 + 4/7 = 7/7 + {7}/7 + {4}/7" ]},
+  { name: "Có 3 phần nguyên", task: "Giống mức 2, nhưng có ba số 1.", qs: [
+    "3 1/2 = 1 + 1 + 1 + 1/2 = 2/2 + 2/2 + {2}/2 + 1/2",
+    "3 2/3 = 1 + 1 + 1 + {2}/3 = {3}/3 + 3/3 + 3/3 + 2/3",
+    "3 3/4 = {1} + {1} + {1} + 3/4 = 4/4 + 4/4 + 4/4 + {3}/4",
+    "3 1/5 = 1 + 1 + 1 + 1/5 = 5/5 + {5}/5 + 5/5 + {1}/5",
+    "3 4/9 = 1 + 1 + 1 + {4}/9 = 9/9 + 9/9 + 9/9 + {4}/9" ]},
+  { name: "Gộp thành một phân số", task: "Cộng các tử số lại, giữ nguyên mẫu số.", qs: [
+    "1 1/2 = 2/2 + 1/2 = {3}/2",
+    "1 3/4 = {4}/4 + 3/4 = {7}/4",
+    "2 2/3 = 3/3 + 3/3 + 2/3 = {8}/3",
+    "2 1/5 = {5}/5 + {5}/5 + 1/5 = {11}/5",
+    "3 1/4 = {4}/4 + {4}/4 + {4}/4 + 1/4 = {13}/4" ]},
+  { name: "Làm ngược lại", task: "Tách phân số thành các phần bằng 1, rồi viết thành hỗn số.", qs: [
+    "5/3 = 3/3 + 2/3 = 1 + {2}/3 = 1 {2}/3",
+    "7/2 = 2/2 + 2/2 + 2/2 + 1/2 = {3} {1}/2",
+    "9/4 = 4/4 + 4/4 + {1}/4 = 2 {1}/4",
+    "11/5 = 5/5 + 5/5 + 1/5 = {2} {1}/5",
+    "10/3 = 3/3 + 3/3 + 3/3 + {1}/3 = {3} {1}/3" ]},
+];
+
+let boxId = 0;
+function cell(t) {
+  const m = t.match(/^\{(.+)\}$/);
+  if (!m) return `<span>${t}</span>`;
+  const id = "b" + (boxId++);
+  return `<span class="slot"><input class="box" id="${id}" data-ans="${m[1]}" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="ô trống"></span>`;
+}
+function frac(t) {
+  const [n, d] = t.split("/");
+  return `<span class="frac"><span class="num">${cell(n)}</span><span class="bar-line"></span><span class="den">${cell(d)}</span></span>`;
+}
+function render(expr) {
+  const tk = expr.trim().split(/\s+/);
+  let out = "";
+  for (let i = 0; i < tk.length; i++) {
+    const t = tk[i];
+    if (t === "=" || t === "+") { out += `<span class="op">${t}</span>`; continue; }
+    if (t.includes("/")) { out += frac(t); continue; }
+    const nxt = tk[i + 1];
+    if (nxt && nxt.includes("/")) { out += `<span class="mixed">${cell(t)}${frac(nxt)}</span>`; i++; }
+    else out += cell(t);
+  }
+  return `<div class="eq">${out}</div>`;
+}
+document.getElementById("levels").innerHTML = LEVELS.map((lv, i) => `
+  <section data-lv="${i}">
+    <h2><span class="lv">Mức ${i + 1}</span>${lv.name}<span class="lvscore"></span></h2>
+    <p class="task">${lv.task}</p>
+    <ol>${lv.qs.map(q => `<li>${render(q)}<span class="mark" aria-hidden="true"></span></li>`).join("")}</ol>
+  </section>`).join("");
+
+const inputs = [...document.querySelectorAll("input.box")];
+const total = LEVELS.reduce((s, l) => s + l.qs.length, 0);
+const $ = id => document.getElementById(id);
+let submitted = false;
+
+function progress() {
+  const filled = inputs.filter(x => x.value.trim() !== "").length;
+  $("progress").textContent = `Đã điền ${filled} / ${inputs.length} ô`;
+}
+inputs.forEach((inp, i) => {
+  inp.addEventListener("input", () => {
+    inp.value = inp.value.replace(/\D/g, "");
+    if (submitted) clearMarks(inp);
+    progress();
+  });
+  inp.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); (inputs[i + 1] || $("submit")).focus(); }
+  });
+});
+
+function clearMarks(inp) {
+  inp.classList.remove("ok", "bad");
+  const li = inp.closest("li"); li.classList.remove("ok", "bad"); li.querySelector(".mark").textContent = "";
+  li.querySelectorAll(".fix").forEach(f => f.remove());
+}
+
+function grade() {
+  submitted = true;
+  let right = 0, wrongBoxes = 0;
+  document.querySelectorAll("section").forEach(sec => {
+    let lvRight = 0;
+    const items = sec.querySelectorAll("li");
+    items.forEach(li => {
+      li.querySelectorAll(".fix").forEach(f => f.remove());
+      let allOk = true;
+      li.querySelectorAll("input.box").forEach(inp => {
+        const ok = inp.value.trim() === inp.dataset.ans;
+        inp.classList.toggle("ok", ok); inp.classList.toggle("bad", !ok);
+        if (!ok) { allOk = false; wrongBoxes++; }
+      });
+      li.classList.toggle("ok", allOk); li.classList.toggle("bad", !allOk);
+      li.querySelector(".mark").textContent = allOk ? "✓" : "✗";
+      if (allOk) { right++; lvRight++; }
+    });
+    sec.querySelector(".lvscore").textContent = `${lvRight} / ${items.length} câu đúng`;
+  });
+  const msg = right === total ? "Tuyệt vời, đúng hết!" : right >= total * 0.8 ? "Giỏi lắm!" : right >= total / 2 ? "Khá rồi, sửa các ô đỏ nhé." : "Cố lên, sửa các ô đỏ rồi nộp lại nhé.";
+  $("result").innerHTML = `Đúng ${right} / ${total} câu. ${msg}<small id="progress"></small>`;
+  progress();
+  $("reveal").hidden = wrongBoxes === 0;
+  const firstBad = inputs.find(x => x.classList.contains("bad"));
+  if (firstBad) firstBad.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+}
+
+function reveal() {
+  inputs.filter(x => x.classList.contains("bad")).forEach(inp => {
+    const slot = inp.parentElement;
+    if (!slot.querySelector(".fix")) slot.insertAdjacentHTML("beforeend", `<span class="fix">${inp.dataset.ans}</span>`);
+  });
+}
+
+function reset() {
+  inputs.forEach(inp => { inp.value = ""; clearMarks(inp); });
+  document.querySelectorAll(".lvscore").forEach(s => s.textContent = "");
+  submitted = false;
+  $("result").innerHTML = `Chưa nộp bài<small id="progress"></small>`;
+  $("reveal").hidden = true;
+  progress();
+  window.scrollTo({ top: 0 });
+  inputs[0].focus();
+}
+
+$("submit").addEventListener("click", grade);
+$("reveal").addEventListener("click", reveal);
+$("reset").addEventListener("click", reset);
+progress();
+</script>
+</body>
+</html>
